@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Funlette</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="index.js"></script>
+</head>
+<body>
+    <header id="encabezado">
+        <a href="#" class="logo">
+            <img src="Imagenes/imagen_2023-01-28_183640683-removebg-preview.png" alt="funlette_logo" class="logo_funlette">
+        </a>
+        <div id="botones">
+            <button class="retiro">Retiro</button>
+            <button class="deposito">Depósito</button>
+            <button class="ingresa">Ingresa</button>
+        </div>
+    </header>
+    <main  id="cuerpo">
+        <section>
+            <div id="contenedor">
+                <div class='roulette-wrapper'>
+                    <div class='selector'></div>
+                    <div class='wheel'></div>
+                </div>
+            </div>
+            <div class="landing-card">
+                <h4 class="text">Tiradas Anteriores</h4>
+                <div class="landing-card-img">
+                    <div id="0" class="img_result cero"></div>
+                    <div id="1" class="img_result uno"></div>
+                    <div id="2" class="img_result dos"></div>
+                    <div id="3" class="img_result tres"></div>
+                    <div id="4" class="img_result cuatro"></div>
+                    <div id="5" class="img_result cinco"></div>
+                    <div id="6" class="img_result seis"></div>
+                    <div id="7" class="img_result siete"></div>
+                    <div id="8" class="img_result ocho"></div>
+                    <div id="9" class="img_result nueve"></div>
+                </div>
+            </div>
+            <div class="apuesta">
+                <div class="cont_apuesta">
+                    <input id="betvalue" name="betvalue" type="number" class="monto" value="">$
+                    <div class="option">
+                        <button class="btn-white"><img src="Imagenes/ficha1_1.png" alt="Ficha White" class="tarjet white" id="white"></button>
+                        <button class="btn-gold"><img src="Imagenes/ficha dorada.png" alt="Ficha Dorada" class="tarjet gold" id="gold"></button>
+                        <button class="btn-black"><img src="Imagenes/ficha2_1.png" alt="Ficha Black" class="tarjet black" id="black"></button>
+                        <button class="btn-clean">Clean</button>
+                    </div>
+                    <div>
+                        <span class="divisa">$</span>
+                        <span class="money">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="resultado">
+                <div class="cont_resultado">
+                    <span class="bet"></span>
+                    <span class="bet_divisa">$</span>
+                </div>
+            </div>
+        </section>
+        <aside>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3>Chat en vivo</h3>
+                </div>
+                <div class="chat-body">
+                    <ul class="message-list">
+                    </ul>
+                </div>
+                <div class="chat-footer">
+                    <textarea class="textarea" placeholder="Escribe un mensaje"></textarea>
+                    <button class="btn-enviar">Enviar</button>
+                </div>
+            </div>
+        </aside>
+    </main>
+</body>
+</html>
