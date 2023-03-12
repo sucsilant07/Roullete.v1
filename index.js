@@ -1,6 +1,8 @@
 $(document).ready(function() {
-    // setup multiple rows of colours, can also add and remove while spinning but overall this is easier.
+    // Configuración de múltiples filas de colores
     initWheel();
+
+    offBtn();
 
     var balance = 100; // saldo inicial del jugador
     var betvalue = document.getElementById("betvalue"); // Obtener el input de la apuesta
@@ -12,32 +14,126 @@ $(document).ready(function() {
         document.querySelector(".money").innerHTML = balance;
     };
 
-    function startSpin() {
-        var outcome = Math.floor(Math.random() * 15);
-        spinWheel(outcome);
+    var timeLeft = 25; //tiempo en segundos
+    var timerBar = $("#timer-bar");
+
+    // función para establecer temporizador
+    function startTimer() {
+        var countdown = setInterval(function() {
+            timeLeft--;
+            var percentageLeft = (timeLeft / 25) * 100;
+            timerBar.width(percentageLeft + "%");
+            if (timeLeft == 0){               
+                clearInterval(countdown);
+                setTimeout(startSpin, 1250);
+                setTimeout(function() {
+                    timeLeft = 25;
+                    timerBar.width("100%");
+                    setTimeout(startTimer, 200);
+                }, 8000);
+            }              
+        }, 1000);
+    }
+    
+    startTimer();
+
+    betvalue.addEventListener("input", function() {
+        var apuesta = parseInt(betvalue.value);
+        if(apuesta){
+            if(apuesta > 0 && apuesta <= balance) {
+                onBtn();
+            } else {
+                offBtn();
+            }
+        } else {
+            offBtn();
+        }
+    });
+
+    // función para habilitar los botones de apuesta
+    function onBtn(){
+        $('.btn-white, .btn-gold, .btn-black, .btn-clean').prop('disabled', false);
     }
 
-    setInterval(startSpin, 26500);
+    // función para deshabilitar los botones de apuesta
+    function offBtn(){
+        $('.btn-white, .btn-gold, .btn-black, .btn-clean').prop('disabled', true);
+    }
+
+    var selectedValue; // variable global para almacenar el valor del botón seleccionado
+
+    $('.btn-white, .btn-gold, .btn-black').click(function() {
+        // Eliminar la clase "active" de todos los botones
+        $('.btn-white, .btn-gold, .btn-black').removeClass('active');
+        
+        // Agregar la clase "active" al botón seleccionado
+        $(this).addClass('active');
+        
+        // Obtener el valor del botón seleccionado por el jugador y almacenarlo en la variable global
+        selectedValue = parseInt($(this).attr("value"));
+    });
+
+    function startSpin() {
+        // desactivar los botones de apuesta y el input
+        betvalue.disabled = true;
+        offBtn();
+        var outcome = Math.floor(Math.random() * 15);
+        spinWheel(outcome);
+        var bet = parseInt(document.querySelector('.bet').innerText);
+        console.log(selectedValue);
+        console.log(outcome);
+        console.log(bet);
+
+        if(bet > 0){
+            //Si el valor del botón y la imagen es 1
+            if (selectedValue == 1 && images[outcome].value == 1) {
+                balance += (bet * 2);
+                setTimeout(function(){
+                    updateBalance();
+                    alert("¡Felicidades! Ganaste"); 
+                }, 6000); 
+            } else if (selectedValue == 2 && images[outcome].value == 2){
+                balance += (bet * 2);
+                setTimeout(function(){
+                    updateBalance();
+                    alert("¡Felicidades! Ganaste"); 
+                }, 6000); 
+            } else if (selectedValue == 0 && images[outcome].value == 0){
+                balance += (bet * 14);
+                setTimeout(function(){
+                    updateBalance();
+                    alert("¡Felicidades! Ganaste"); 
+                }, 6000); 
+            }else {
+                // el jugador perdió la apuesta
+                setTimeout(function(){
+                    updateBalance();
+                    alert("Lo siento, perdiste tu apuesta.");
+                }, 6000); 
+            }
+        }else{
+        }
+    }
 
     var $selector = $('.selector');
     var images = [  
-        { name: "Image 1", class:"white", src: "Imagenes/ficha1_1.png", valor: 1},
-        { name: "Image 2", class:"black", src: "Imagenes/ficha2_1.png", valor: 8},
-        { name: "Image 3", class:"white", src: "Imagenes/ficha1_2.png", valor: 2},
-        { name: "Image 4", class:"black", src: "Imagenes/ficha2_2.png", valor: 9},
-        { name: "Image 5", class:"white", src: "Imagenes/ficha1_3.png", valor: 3},
-        { name: "Image 6", class:"black", src: "Imagenes/ficha2_3.png", valor: 10},
-        { name: "Image 7", class:"white", src: "Imagenes/ficha1_4.png", valor: 4},
-        { name: "Image 8", class:"gold", src: "Imagenes/ficha dorada.png", valor: 0},
-        { name: "Image 9", class:"black", src: "Imagenes/ficha2_4.png", valor: 11},
-        { name: "Image 10", class:"white", src: "Imagenes/ficha1_5.png", valor: 5},
-        { name: "Image 11", class:"black", src: "Imagenes/ficha2_5.png", valor: 12},
-        { name: "Image 12", class:"white", src: "Imagenes/ficha1_6.png", valor: 6},
-        { name: "Image 13", class:"black", src: "Imagenes/ficha2_6.png", valor: 13},
-        { name: "Image 14", class:"white", src: "Imagenes/ficha1_7.png", valor: 7},
-        { name: "Image 15", class:"black", src: "Imagenes/ficha2_7.png", valor: 14}
+        { name: "Image 1", class:"white", src: "Imagenes/ficha1_1.png", value: 1},
+        { name: "Image 2", class:"black", src: "Imagenes/ficha2_1.png", value: 2},
+        { name: "Image 3", class:"white", src: "Imagenes/ficha1_2.png", value: 1},
+        { name: "Image 4", class:"black", src: "Imagenes/ficha2_2.png", value: 2},
+        { name: "Image 5", class:"white", src: "Imagenes/ficha1_3.png", value: 1},
+        { name: "Image 6", class:"black", src: "Imagenes/ficha2_3.png", value: 2},
+        { name: "Image 7", class:"white", src: "Imagenes/ficha1_4.png", value: 1},
+        { name: "Image 8", class:"gold", src: "Imagenes/ficha dorada.png", value: 0},
+        { name: "Image 9", class:"black", src: "Imagenes/ficha2_4.png", value: 2},
+        { name: "Image 10", class:"white", src: "Imagenes/ficha1_5.png", value: 1},
+        { name: "Image 11", class:"black", src: "Imagenes/ficha2_5.png", value: 2},
+        { name: "Image 12", class:"white", src: "Imagenes/ficha1_6.png", value: 1},
+        { name: "Image 13", class:"black", src: "Imagenes/ficha2_6.png", value: 2},
+        { name: "Image 14", class:"white", src: "Imagenes/ficha1_7.png", value: 1},
+        { name: "Image 15", class:"black", src: "Imagenes/ficha2_7.png", value: 2}
     ];
-    
+
     function initWheel(){
 	    var $wheel = $('.roulette-wrapper .wheel'),
   		    row = "";
@@ -52,7 +148,7 @@ $(document).ready(function() {
             row += "  <div class='card white' data-id='1'><img src='Imagenes/ficha1_4.png' alt='7'></div>";
             row += "  <div class='card gold' data-id='0'><img src='Imagenes/ficha dorada.png' alt='8'></div>";
             row += "  <div class='card black' data-id='2'><img src='Imagenes/ficha2_4.png' alt='9'></div>";
-            row += "  <div class='card white' data-id='1'><img src='Imagenes/ficha1_5.png' alt='50'></div>";
+            row += "  <div class='card white' data-id='1'><img src='Imagenes/ficha1_5.png' alt='10'></div>";
             row += "  <div class='card black' data-id='2'><img src='Imagenes/ficha2_5.png' alt='11'></div>";
             row += "  <div class='card white' data-id='1'><img src='Imagenes/ficha1_6.png' alt='12'></div>";
             row += "  <div class='card black' data-id='2'><img src='Imagenes/ficha2_6.png' alt='13'></div>";
@@ -167,10 +263,72 @@ $(document).ready(function() {
             showResult();
 
         }, 6 * 1000);
-    }
-  
-    startSpin();
 
+        // habilitar los botones de apuesta después de girar la ruleta
+        setTimeout(function(){
+            betvalue.disabled = false;
+            offBtn();
+            document.querySelector('.bet').textContent = '0';
+            document.querySelector('.monto').value = '';
+        }, 8000);
+    }
+
+    $('.btn-white').click(function() {
+        setCoin('white');
+        $('.btn-white').prop('disabled', true);
+        $('.btn-gold').prop('disabled', true);
+        $('.btn-black').prop('disabled', true);
+    });
+
+    $('.btn-gold').click(function() {
+        setCoin('gold');
+        $('.btn-white').prop('disabled', true);
+        $('.btn-gold').prop('disabled', true);
+        $('.btn-black').prop('disabled', true);
+    });
+
+    $('.btn-black').click(function() {
+        setCoin('black');
+        $('.btn-white').prop('disabled', true);
+        $('.btn-gold').prop('disabled', true);
+        $('.btn-black').prop('disabled', true);
+    });
+
+    $('.btn-clean').click(function() {
+        resetGame();
+    });
+
+    // Función que establece la apuesta en el juego
+    function setCoin(color){
+        var apuesta = parseInt(betvalue.value);
+        balance -= apuesta;
+        betvalue.value = apuesta;
+        document.querySelector(".bet").innerHTML = apuesta;
+        updateBalance();
+    }
+
+    function resetGame() {
+        balance += parseInt(document.querySelector('.bet').textContent);
+        document.querySelector('.bet').textContent = '0';
+        document.querySelector('.monto').value = '';
+        updateBalance();
+
+        // Volver a agregar el listener de input
+        betvalue.addEventListener("input", function() {
+        var apuesta = parseInt(betvalue.value);
+            if(apuesta > 0 && apuesta <= balance) {
+                $('.btn-white').prop('disabled', false);
+                $('.btn-gold').prop('disabled', false);
+                $('.btn-black').prop('disabled', false);
+                $('.btn-clean').prop('disabled', false);
+            } else {
+                $('.btn-white').prop('disabled', true);
+                $('.btn-gold').prop('disabled', true);
+                $('.btn-black').prop('disabled', true);
+                $('.btn-clean').prop('disabled', true);
+            }
+        });
+    }
 });
 
 //##################################################################

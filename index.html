@@ -27,6 +27,9 @@
                     <div class='selector'></div>
                     <div class='wheel'></div>
                 </div>
+                <div id="timer-container">
+                    <div id="timer-bar"></div>
+                </div>
             </div>
             <div class="landing-card">
                 <h4 class="text">Tiradas Anteriores</h4>
@@ -47,9 +50,9 @@
                 <div class="cont_apuesta">
                     <input id="betvalue" name="betvalue" type="number" class="monto" value="">$
                     <div class="option">
-                        <button class="btn-white"><img src="Imagenes/ficha1_1.png" alt="Ficha White" class="tarjet white" id="white"></button>
-                        <button class="btn-gold"><img src="Imagenes/ficha dorada.png" alt="Ficha Dorada" class="tarjet gold" id="gold"></button>
-                        <button class="btn-black"><img src="Imagenes/ficha2_1.png" alt="Ficha Black" class="tarjet black" id="black"></button>
+                        <button class="btn-white" value="1"><img src="Imagenes/ficha1_1.png" alt="Ficha White" class="tarjet white" id="white"></button>
+                        <button class="btn-gold" value="0"><img src="Imagenes/ficha dorada.png" alt="Ficha Dorada" class="tarjet gold" id="gold"></button>
+                        <button class="btn-black" value="2"><img src="Imagenes/ficha2_1.png" alt="Ficha Black" class="tarjet black" id="black"></button>
                         <button class="btn-clean">Clean</button>
                     </div>
                     <div>
@@ -60,7 +63,7 @@
             </div>
             <div class="resultado">
                 <div class="cont_resultado">
-                    <span class="bet"></span>
+                    <span class="bet">0</span>
                     <span class="bet_divisa">$</span>
                 </div>
             </div>
