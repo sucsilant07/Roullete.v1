@@ -63,14 +63,14 @@ $(document).ready(function() {
     var selectedValue; // variable global para almacenar el valor del botón seleccionado
 
     $('.btn-white, .btn-gold, .btn-black').click(function() {
+        // Obtener el valor del botón seleccionado por el jugador y almacenarlo en la variable global
+        selectedValue = Number($(this).attr("value"));
+        
         // Eliminar la clase "active" de todos los botones
         $('.btn-white, .btn-gold, .btn-black').removeClass('active');
         
         // Agregar la clase "active" al botón seleccionado
         $(this).addClass('active');
-        
-        // Obtener el valor del botón seleccionado por el jugador y almacenarlo en la variable global
-        selectedValue = parseInt($(this).attr("value"));
     });
 
     function startSpin() {
@@ -83,35 +83,39 @@ $(document).ready(function() {
         console.log(selectedValue);
         console.log(outcome);
         console.log(bet);
+        // Calcular el pago de la apuesta actual
+        var payout = calculatePayout(selectedValue, images[outcome].value);
 
         if(bet > 0){
-            //Si el valor del botón y la imagen es 1
-            if (selectedValue == 1 && images[outcome].value == 1) {
-                balance += (bet * 2);
-                setTimeout(function(){
+            // Actualizar el balance del jugador y mostrar un mensaje de ganancia o pérdida
+            if (payout > 0) {
+                balance += (bet * payout);
+                setTimeout(function() {
                     updateBalance();
-                    alert("¡Felicidades! Ganaste"); 
-                }, 6000); 
-            } else if (selectedValue == 2 && images[outcome].value == 2){
-                balance += (bet * 2);
-                setTimeout(function(){
-                    updateBalance();
-                    alert("¡Felicidades! Ganaste"); 
-                }, 6000); 
-            } else if (selectedValue == 0 && images[outcome].value == 0){
-                balance += (bet * 14);
-                setTimeout(function(){
-                    updateBalance();
-                    alert("¡Felicidades! Ganaste"); 
-                }, 6000); 
-            }else {
-                // el jugador perdió la apuesta
-                setTimeout(function(){
+                    alert("¡Felicidades! Ganaste " + (bet * payout) + " dólares.");
+                }, 6000);
+            } else {
+                setTimeout(function() {
                     updateBalance();
                     alert("Lo siento, perdiste tu apuesta.");
-                }, 6000); 
+                }, 6000);
             }
         }else{
+        }
+    }
+
+    // Función que calcula el pago de una apuesta basándose en el valor de la apuesta y el resultado del giro
+    function calculatePayout(selectedValue, spinValue) {
+        var payouts = {
+            1: { 1: 2 },
+            2: { 2: 2 },
+            0: { 0: 14 }
+        };
+    
+        if (payouts[selectedValue] && payouts[selectedValue][spinValue]) {
+            return payouts[selectedValue][spinValue];
+        } else {
+            return 0;
         }
     }
 
